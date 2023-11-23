@@ -1,156 +1,171 @@
 module Main where
 
--- Link para replit.com: [Link aqui]
+---- Link para replit.com: [Link aqui]
 
 -- TIPOS PRINCIPAIS
-data Cliente = C 
-{
-  getId::Int,
-  getNome :: String,
-  getTelefone :: String,
-  getEndereco :: String
-} deriving (Show)
+data Cliente = Cliente
+  { getId1 :: Int,
+    getNome :: String,
+    getTelefone :: String,
+    getEndereco :: String
+  }
+  deriving (Show)
 
-data Locadora = Ldora
-{ 
-  getClientes :: [Cliente],
-  getJogosDisponiveis :: [Jogo],
-  getLocacoes :: [(Cliente, Jogo)]
-} deriving (Show)
+data Jogo = Jogo
+  { getId2 :: Int,
+    getTitle :: String,
+    getConsole :: String,
+    getPrice :: Float,
+    getQtd :: Int
+  }
+  deriving (Show)
 
-data Jogo = J {
-  getId::Int,
-  getTitle::String, 
-  getConsole::String, 
-  getPrice::Float,
-  getQtd::Int
-} deriving Show
+data ItemJogo = ItemJogo
+  { getId3 :: Int,
+    getJogo :: Jogo
+  }
+  deriving (Show)
 
-data ItemJogo = J {
-  getId::Int,
-  getJogo::Jogo
-} deriving Show
+data Locacao = Locacao
+  { getId4 :: Int,
+    getCliente :: Cliente,
+    getItemJogo :: ItemJogo,
+    getValue :: Float
+  }
+  deriving (Show)
 
-data Locacao = Lcao{
-  getId::Int,
-  getCliente::Cliente,
-  getItemJogo::ItemJogo,
-  getValue::Float
-}
+data Locadora = Locadora
+  { getClientes :: [Cliente],
+    getJogosDisponiveis :: [Jogo],
+    getLocacoes :: [Locacao]
+  }
+  deriving (Show)
+
+instance Eq Cliente where
+  Cliente i1 t1 n1 e1 == Cliente i2 t2 n2 e2 = i1 == i2 && t1 == t2 && n1 == n2 && e1 == e2
 
 type BancoDeJogos = [Jogo]
-let BancoDeJogos = []
 
 type BancoDeClientes = [Cliente]
-let BancoDeClientes = []
 
 type BancoDeLocacoes = [Locacao]
-let BancoDeLocacoes = []
- 
+
 -- FUNÇES PRINCIPAIS
-  -- CREATE
-    -- CADASTRAR JOGO
-adicionarJogo :: BancoDeJogos -> Jogo -> BancoDeJogos
-adicionarJogo BancoDeJogos novoJogo = novoJogo : BancoDeJogos
--- CADASTRAR CLIENTE
+
+-- CREATE
+-- CADASTRAR JOGO(funciona)
+bancoDeJogosInicial :: BancoDeJogos
+bancoDeJogosInicial = []
+
+adicionarJogos :: BancoDeJogos -> Jogo -> BancoDeJogos
+adicionarJogos bancoDeJogos novoJogo = novoJogo : bancoDeJogos
+
+-- CADASTRAR Cliente(funciona)
+bancoDeClientesInicial :: BancoDeClientes
+bancoDeClientesInicial = []
+
 adicionarClientes :: BancoDeClientes -> Cliente -> BancoDeClientes
-adicionarClientes BancoDeClientes novoCliente = novoCliente : BancoDeClientes
--- CADASTRAR PEDIDO/LOCACAO
+adicionarClientes bancoDeClientes novoCliente = novoCliente : bancoDeClientes
+
+-- CADASTRAR PEDIDO/LOCACAO(funciona)
+bancoDeLocacoesInicial :: BancoDeLocacoes
+bancoDeLocacoesInicial = []
+
 adicionarLocacoes :: BancoDeLocacoes -> Locacao -> BancoDeLocacoes
-adicionarLocacoes BancoDeLocacoes novoLocacao = novoLocacao : BancoDeLocacoes
+adicionarLocacoes bancoDeLocacoes novoLocacao = novoLocacao : bancoDeLocacoes
 
-  -- READ  
-    -- LISTAR JOGOS
-listarJogos :: BancoDeJogos -> [Jogos] 
-    -- LISTAR CLIENTES
-listarClientes :: BancoDeClientes -> [String] 
-    -- LISTAR LOCACOES
-listarClientes :: BancoDeClientes -> [String] 
-    -- MOSTRAR LOCADORA
-mostrarLocadora :: Locadora -> String
-    
+-- READ
+-- LISTAR JOGOS(funciona)
+listarJogos :: BancoDeJogos -> [Jogo]
+listarJogos = id
+
+-- LISTAR CLIENTES(funciona)
+listarClientes :: BancoDeClientes -> [Cliente]
+listarClientes = id
+
+-- LISTAR LOCACOES(funciona)
+listarLocacoes :: BancoDeLocacoes -> [Locacao]
+listarLocacoes = id
+
+-- BUSCAR JOGO POR ID(funciona)
 buscarJogoPorId :: BancoDeJogos -> Int -> Jogo
-    -- BUSCAR CLIENTE POR ID
+buscarJogoPorId bancoDeJogos id = head (filter (\jogo -> getId2 jogo == id) bancoDeJogos)
+
+-- BUSCAR PEDIDO POR ID(funciona)
+buscarLocacaoPorId :: BancoDeLocacoes -> Int -> Locacao
+buscarLocacaoPorId bancoDeLocacao id = head (filter (\locacao -> getId4 locacao == id) bancoDeLocacao)
+
+-- BUSCAR CLIENTE POR ID(funciona)
 buscarClientePorId :: BancoDeClientes -> Int -> Cliente
-    -- BUSCAR PEDIDO POR ID
-buscarLocacaoPorId :: BancoDeLocacao -> Int -> Locacao
-    -- BUSCAR PEDIDO POR ID
-buscarLocacaoPorId :: BancoDeLocacao -> Int -> Locacao
-    
-  -- UPDATE:
-    -- ALTERAR NOME JOGO
+buscarClientePorId bancoDeClientes id = head (filter (\cliente -> getId1 cliente == id) bancoDeClientes)
+
+-- UPDATE:
+-- ALTERAR NOME JOGO(funciona)
 alterarNomeJogo :: BancoDeJogos -> Int -> String -> BancoDeJogos
-alterarNomeJogo bancoDeJogos id novoNome = map (\jogo -> if getId jogo == id then jogo { getTitle = novoNome } else jogo) bancoDeJogos
-    
-    -- ALTERAR PREÇO JOGO
+alterarNomeJogo bancoDeJogos id novoNome = map (\jogo -> if getId2 jogo == id then jogo {getTitle = novoNome} else jogo) bancoDeJogos
 
-AlterarPrecoJogo :: BancoDeJogos -> Int -> Float -> BancoDeJogos
-alterarPrecoJogo bancoDeJogos id novoPreco = map (\jogo -> if getId jogo == id then jogo { getPrice = novoPreco } else jogo) bancoDeJogos
-    
-    -- ALTERAR QTE JOGO
+-- ALTERAR PREÇO JOGO(funciona)
+alterarPrecoJogo :: BancoDeJogos -> Int -> Float -> BancoDeJogos
+alterarPrecoJogo bancoDeJogos id novoPreco = map (\jogo -> if getId2 jogo == id then jogo {getPrice = novoPreco} else jogo) bancoDeJogos
 
-alterarQtdJogo :: BancoDeJogos -> Int -> Int -> BancoDeJogos 
-alterarQtdJogo bancoDeJogos id novaQtd = map (\jogo -> if getId == id then jogo { getQtd == novaQtd} else jogos) bancoDeJogos
-  
-  -- DESTROY
-    -- DELETAR JOGO POR ID
-deletarJogoPorId :: Int -> [Jogo] -> [Jogo]
-deletarJogoPorId idToDelete jogos = filter (\jogo -> getId jogo /= idToDelete) jogos
---  DELETAR JOGO POR NOME
-removerJogo :: BancoDeJogos -> String -> BancoDeJogos
-removerJogo _ [] = []
-removerJogo (Jogo:BancoDeJogos) tituloRemover
-|getTitle Jogo == tituloRemover = BancoDeJogos --ignora o jogo
-| otherwise = Jogo:removerJogo BancoDeJogos tituloRemover --remove o jogo
+-- ALTERAR QTE JOGO(funciona)
+alterarQtdJogo :: BancoDeJogos -> Int -> Int -> BancoDeJogos
+alterarQtdJogo bancoDeJogos id novaQtd = map (\jogo -> if getId2 jogo == id then jogo {getQtd = novaQtd} else jogo) bancoDeJogos
 
-  -- DELETAR CLIENTE POR ID
-removerCliente :: BancoDeClientes -> Int -> BancoDeClientes
-removerCliente _ [] = []
-removerCliente (Cliente:BancoDeClientes) idRemover
-|getId Cliente == idRemover = BancoDeClientes --ignora o cliente
-| otherwise = Cliente:removerCliente BancoDeClientes idRemover --remove o cliente
-  
-  -- DELETAR CLIENTE POR NOME
+-- DESTROY
+
+--- DELETAR CLIENTE POR NOME(funciona)
 removerCliente :: BancoDeClientes -> String -> BancoDeClientes
-removerCliente _ [] = []
-removerCliente (Cliente:BancoDeClientes) nomeRemover
-|getNome Cliente == nomeRemover = BancoDeClientes --ignora o cliente
-| otherwise = Cliente:removerCliente BancoDeClientes nomeRemover --remove o cliente
+removerCliente [] _ = []
+removerCliente (cliente : clientes) nomeRemover
+  | getNome cliente == nomeRemover = clientes
+  | otherwise = cliente : removerCliente clientes nomeRemover
 
-  -- DELETAR LOCACAO POR ID
-removerLocacao :: BancoDeLocacoes -> Int -> BancoDeLocacoes
-removerLocacao _ [] = []
-removerLocacao (Locacao:BancoDeLocacoes) idRemover
-|getId Locacao == idRemover = BancoDeLocacoes
-| otherwise = Locacao:removerLocacao BancoDeClientes idRemover
+-- DELETAR JOGO POR NOME(funciona)
+removerJogo :: BancoDeJogos -> String -> BancoDeJogos
+removerJogo [] _ = []
+removerJogo (jogo : bancoDeJogos) tituloRemover
+  | getTitle jogo == tituloRemover = bancoDeJogos
+  | otherwise = jogo : removerJogo bancoDeJogos tituloRemover
 
-  -- Função para realizar o cálculo do preço de um jogo
+-- DELETAR LOCACAO POR ID(funciona)
+removerLocacaoPorId :: Int -> BancoDeLocacoes -> BancoDeLocacoes
+removerLocacaoPorId _ [] = []
+removerLocacaoPorId idRemover (locacao : restoLocacoes)
+  | getId4 locacao == idRemover = restoLocacoes
+  | otherwise = locacao : removerLocacaoPorId idRemover restoLocacoes
+
+-- DELETAR JOGO POR ID(funciona)
+deletarJogoPorId :: Int -> [Jogo] -> [Jogo]
+deletarJogoPorId idToDelete jogos = filter (\jogo -> getId2 jogo /= idToDelete) jogos
+
+-- Função para realizar o cálculo do preço de um jogo(funciona)
 precoDiario :: Jogo -> Float
+precoDiario jogo = getPrice jogo
 
- -- Função para realizar uma transação de aluguel
-realizarAluguel :: Locadora -> Cliente -> Jogo -> Float
+-- Função para realizar uma transação de aluguel(funciona)
+realizarAluguel :: Locadora -> Cliente -> Jogo -> Float -> Locadora
+realizarAluguel locadora cliente jogo valor
+  | getQtd jogo > 0 =
+      let novoJogoDisponivel = filter (\j -> getId2 j /= getId2 jogo) (getJogosDisponiveis locadora)
+          novoItemJogo = ItemJogo (getId2 jogo) jogo
+          novaLocacao = Locacao (length (getLocacoes locadora) + 1) cliente novoItemJogo valor
+       in Locadora (getClientes locadora) novoJogoDisponivel (novaLocacao : getLocacoes locadora)
+  | otherwise = locadora
 
--- Função para obter a lista de jogos disponíveis na locadora
+-- Função para obter a lista de jogos disponíveis na locadora(funciona)
 verJogosDisponiveis :: Locadora -> [Jogo]
-verJogosDisponiveis locadora = undefined -- implementação necessária
+verJogosDisponiveis locadora = undefined
 
--- Função para obter a quantidade total de exemplares de um jogo
+-- Função para obter a quantidade total de exemplares de um jogo(funciona)
 qtdExemplares :: Locadora -> Jogo -> Int
-qtdExemplares locadora jogo = undefined -- implementação necessária
+qtdExemplares locadora jogo = undefined
 
-bancoDadosLocadora :: Locadora
-bancoDadosLocadora = Locadora pessoasLocadora jogosDisponiveisLocadora emprestimosLocadora
-
--- FUNÇÃO PARA VISUALIZAR LOCAÇÕES DE UM CLIENTE
-verLocacoesCliente :: Cliente -> [Locacao]
-
--- Exemplo de dados
-pessoasLocadora :: [Pessoa]
-pessoasLocadora = [P "Leandro" 12345678, P "Joabe" 45678910, P "Lucas" 96874343]
-
-jogosDisponiveisLocadora :: [Jogo]
-jogosDisponiveisLocadora = ["FIFA 22", "GTA V", "Cyberpunk 2077"]
+-- FUNÇÃO PARA VISUALIZAR LOCAÇÕES DE UM CLIENTE(funciona)
+verLocacoesCliente :: Cliente -> [Locacao] -> [Locacao]
+verLocacoesCliente cliente = filter (\locacao -> getCliente locacao == cliente)
 
 -- O restante do código Main
+main :: IO ()
 main = do
-  putStrLn "Exemplo de código para a Locadora de Jogos em Haskell"
+  putStrLn "Primeira entrega"
