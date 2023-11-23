@@ -19,9 +19,10 @@ data Cliente = Cliente
 data Jogo = Jogo
   { getId2 :: Int,
     getTitle :: String,
-    getConsole :: String,
+    getPlataforma :: String,
+    getCategory :: String,
     getPrice :: Float,
-    getQtd :: Int
+    getQtdDisponivel :: Int
   }
   deriving (Show)
 
@@ -39,6 +40,7 @@ data Locacao = Locacao
   }
   deriving (Show)
 
+-- tipo para facilitar relatorios
 data Locadora = Locadora
   { getClientes :: [Cliente],
     getJogosDisponiveis :: [Jogo],
@@ -115,23 +117,36 @@ alterarPrecoJogo bancoDeJogos id novoPreco = map (\jogo -> if getId2 jogo == id 
 
 -- ALTERAR QTE JOGO(funciona)
 alterarQtdJogo :: BancoDeJogos -> Int -> Int -> BancoDeJogos
-alterarQtdJogo bancoDeJogos id novaQtd = map (\jogo -> if getId2 jogo == id then jogo {getQtd = novaQtd} else jogo) bancoDeJogos
+alterarQtdJogo bancoDeJogos id novaQtd = map (\jogo -> if getId2 jogo == id then jogo {getQtdDisponivel = novaQtd} else jogo) bancoDeJogos
 
 -- DESTROY
+--- DELETAR CLIENTE POR ID(funciona)
+removerCliente :: BancoDeClientes -> Int -> BancoDeClientes
+removerCliente [] _ = []
+removerCliente (cliente : clientes) idRemover
+  | getId1 cliente == idRemover = clientes
+  | otherwise = cliente : removerCliente clientes idRemover
 
 --- DELETAR CLIENTE POR NOME(funciona)
-removerCliente :: BancoDeClientes -> String -> BancoDeClientes
-removerCliente [] _ = []
-removerCliente (cliente : clientes) nomeRemover
+removerClientePorNome :: BancoDeClientes -> String -> BancoDeClientes
+removerClientePorNome [] _ = []
+removerClientePorNome (cliente : clientes) nomeRemover
   | getNome cliente == nomeRemover = clientes
-  | otherwise = cliente : removerCliente clientes nomeRemover
+  | otherwise = cliente : removerClientePorNome clientes nomeRemover
+
+-- DELETAR JOGO POR ID(funciona)
+removerJogoPorId :: Int -> BancoDeJogos -> BancoDeJogos
+removerJogoPorId _ [] = []
+removerJogoPorId idRemover (jogo : restoJogos)
+  | getId2 jogo == idRemover = restoJogos
+  | otherwise = jogo : removerJogoPorId idRemover restoJogos
 
 -- DELETAR JOGO POR NOME(funciona)
-removerJogo :: BancoDeJogos -> String -> BancoDeJogos
-removerJogo [] _ = []
-removerJogo (jogo : bancoDeJogos) tituloRemover
+removerJogoPorNome :: BancoDeJogos -> String -> BancoDeJogos
+removerJogoPorNome [] _ = []
+removerJogoPorNome (jogo : bancoDeJogos) tituloRemover
   | getTitle jogo == tituloRemover = bancoDeJogos
-  | otherwise = jogo : removerJogo bancoDeJogos tituloRemover
+  | otherwise = jogo : removerJogoPorNome bancoDeJogos tituloRemover
 
 -- DELETAR LOCACAO POR ID(funciona)
 removerLocacaoPorId :: Int -> BancoDeLocacoes -> BancoDeLocacoes
@@ -140,23 +155,19 @@ removerLocacaoPorId idRemover (locacao : restoLocacoes)
   | getId4 locacao == idRemover = restoLocacoes
   | otherwise = locacao : removerLocacaoPorId idRemover restoLocacoes
 
--- DELETAR JOGO POR ID(funciona)
-deletarJogoPorId :: Int -> [Jogo] -> [Jogo]
-deletarJogoPorId idToDelete jogos = filter (\jogo -> getId2 jogo /= idToDelete) jogos
+-- Função para realizar o cálculo do preço do emprestimo de um jogo(funciona)
+-- preco :: Jogo -> Float
+-- preco jogo = getPrice jogo
 
--- Função para realizar o cálculo do preço de um jogo(funciona)
-precoDiario :: Jogo -> Float
-precoDiario jogo = getPrice jogo
-
--- Função para realizar uma transação de aluguel(funciona)
-realizarAluguel :: Locadora -> Cliente -> Jogo -> Float -> Locadora
-realizarAluguel locadora cliente jogo valor
-  | getQtd jogo > 0 =
-      let novoJogoDisponivel = filter (\j -> getId2 j /= getId2 jogo) (getJogosDisponiveis locadora)
-          novoItemJogo = ItemJogo (getId2 jogo) jogo
-          novaLocacao = Locacao (length (getLocacoes locadora) + 1) cliente novoItemJogo valor
-       in Locadora (getClientes locadora) novoJogoDisponivel (novaLocacao : getLocacoes locadora)
-  | otherwise = locadora
+-- Função para realizar uma transação de aluguel(funciona) -- Usando ItemJogo
+-- realizarAluguel :: Locadora -> Cliente -> Jogo -> Float -> Locadora
+-- realizarAluguel locadora cliente jogo valor
+--  | getQtdDisponivel jogo > 0 =
+--      let novoJogoDisponivel = filter (\j -> getId2 j /= getId2 jogo) (getJogosDisponiveis locadora)
+--          novoItemJogo = ItemJogo (getId2 jogo) jogo
+--          novaLocacao = Locacao (length (getLocacoes locadora) + 1) cliente novoItemJogo valor
+--       in Locadora (getClientes locadora) novoJogoDisponivel (novaLocacao : getLocacoes locadora)
+--  | otherwise = locadora
 
 -- Função para obter a lista de jogos disponíveis na locadora(funciona)
 verJogosDisponiveis :: Locadora -> [Jogo]
