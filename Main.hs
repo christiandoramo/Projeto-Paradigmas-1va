@@ -1,6 +1,11 @@
 module Main where
 
----- Link para replit.com: [Link aqui]
+---- Link para replit.com: https://replit.com/@christiandoramo/Projeto-Paradigmas-1va#Main.hs
+---- Equipe
+-- CAIO FONTES DE MELO
+-- CARLOS EDUARDO RIBEIRO
+-- CHRISTIAN OLIVEIRA DO RAMO
+-- GIOVANNI LIMA DO NASCIMENTO
 
 -- TIPOS PRINCIPAIS
 data Cliente = Cliente
