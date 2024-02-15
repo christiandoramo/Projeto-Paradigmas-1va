@@ -1,0 +1,23 @@
+# Haskell
+dist/
+cabal-dev/
+*.hi
+*.o
+*.chi
+*.chs.h
+*.dyn_o
+*.dyn_hi
+*.hcr
+*.swp
+
+# Stack
+.stack-work/
+
+# GHC tags
+TAGS
+.hasktags
+
+# VS Code
+.vscode/
+*.code-workspace
+.history/
